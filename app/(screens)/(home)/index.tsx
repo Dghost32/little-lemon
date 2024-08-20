@@ -4,8 +4,11 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -20,6 +23,35 @@ export default function HomeScreen() {
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Routes</ThemedText>
+        <ThemedText
+          type="defaultSemiBold"
+          onPress={() => {
+            router.push("/");
+          }}
+        >
+          Home
+        </ThemedText>
+        <ThemedText
+          onPress={() => {
+            router.push("/explore");
+          }}
+          type="defaultSemiBold"
+        >
+          Explore
+        </ThemedText>
+        <ThemedText
+          onPress={() => {
+            router.push("/onboarding");
+          }}
+          type="defaultSemiBold"
+        >
+          onboarding
+        </ThemedText>
+      </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>

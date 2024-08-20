@@ -12,6 +12,7 @@ export default function TabLayout() {
     }}>
       <Stack.Screen name="(home)" />
       <Stack.Screen name="explore" />
+      <Stack.Screen name="onboarding" />
     </Stack>
   );
 }
