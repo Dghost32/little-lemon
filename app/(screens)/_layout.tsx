@@ -1,18 +1,18 @@
-import { Stack } from 'expo-router';
-import React from 'react';
-
-// import { useColorScheme } from '@/hooks/useColorScheme';
+import useAsync from "@/hooks/useAsync";
+import useAsyncStorage from "@/hooks/useAsyncStorage";
+import { Stack, useRouter } from "expo-router";
+import React from "react";
 
 export default function TabLayout() {
-  // const colorScheme = useColorScheme();
-
   return (
-    <Stack screenOptions={{
-      headerShown: false,
-    }}>
-      <Stack.Screen name="(home)" />
-      <Stack.Screen name="explore" />
-      <Stack.Screen name="onboarding" />
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="(home)/index" />
+      <Stack.Screen name="explore/index" />
+      <Stack.Screen name="onboarding/index" />
     </Stack>
   );
 }

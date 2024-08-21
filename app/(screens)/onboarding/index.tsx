@@ -1,55 +1,113 @@
-import { Image, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "@/components/UI/Button";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedText } from "@/components/ThemedText";
+import { useRouter } from "expo-router";
+import useForm from "@/hooks/useForm";
+import Input from "@/components/Form/Input";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { ThemedKeyboardAvoidingView } from "@/components/ThemedKeyboardAvoidingView";
+import defaultStyles from "@/styles";
+import validateEmail from "@/lib/validateEmail";
+import useAsyncStorage from "@/hooks/useAsyncStorage";
 
-export default function HomeScreen() {
+export default function Onboarding() {
+  const color = useThemeColor({}, "text");
+  const router = useRouter();
+  const { values, handleChange, validate } = useForm({
+    defaultValues: {
+      name: {
+        value: "",
+        error: false,
+        optional: false,
+      },
+      email: {
+        value: "",
+        error: false,
+        optional: false,
+      },
+    },
+  });
+  const { save } = useAsyncStorage();
+  const { shadow, rounded } = defaultStyles;
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-        />
-      }
+    <ThemedKeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
+      <ThemedView style={[styles.contentContainer, shadow, rounded]}>
+        <ThemedText type="title" style={{ textAlign: "center" }}>
+          Welcome to Little Lemon 🍋
+        </ThemedText>
+        <ThemedText type="default">Let us get to know you</ThemedText>
 
-      <ThemedView style={styles.titleContainer}>
-        <Button
-          disabled={false}
-          text="Get Started"
-          onPress={() => {
-            alert("hello");
-          }}
-        />
+        <ThemedView style={{ width: "100%" }}>
+          <Input
+            value={values.name.value}
+            onChangeText={(text) => handleChange("name", text)}
+            placeholder="Name"
+            placeholderTextColor={color}
+            error={values.name.error}
+            keyboardType="default"
+            autoComplete="name"
+          />
+        </ThemedView>
+
+        <ThemedView style={{ width: "100%" }}>
+          <Input
+            value={values.email.value}
+            onChangeText={(text) => handleChange("email", text)}
+            placeholder="Email"
+            placeholderTextColor={color}
+            keyboardType="email-address"
+            autoComplete="email"
+            error={
+              (!validateEmail(values.email.value ?? "") &&
+                values.email.value !== "") ||
+              values.email.error
+            }
+            errorMessage="Invalid email"
+          />
+        </ThemedView>
+
+        <ThemedView style={{ width: "100%" }}>
+          <Button
+            disabled={values.name.error || values.email.error}
+            text="Next"
+            onPress={async () => {
+              if (
+                validate((data) => {
+                  return validateEmail(data.email.value ?? "");
+                })
+              ) {
+                await save("user", values.name.value ?? "");
+                await save("email", values.email.value ?? "");
+
+                router.push("/");
+              }
+            }}
+          />
+        </ThemedView>
       </ThemedView>
-    </ParallaxScrollView>
+    </ThemedKeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "column",
+  container: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    gap: 8,
+    paddingHorizontal: 16,
+    gap: 16,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  contentContainer: {
+    width: "100%",
+    maxWidth: 500,
+    alignItems: "center",
+    padding: 35,
+    gap: 16,
   },
 });

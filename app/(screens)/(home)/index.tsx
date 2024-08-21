@@ -5,9 +5,33 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
+import useAsyncStorage from "@/hooks/useAsyncStorage";
+import useAsync from "@/hooks/useAsync";
+import Loading from "@/components/UI/Loading";
+import useLog from "@/hooks/useConsoleLog";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { get, keys, clear} = useAsyncStorage();
+  const {
+    value: username,
+    error,
+    loading,
+  } = useAsync(async () => await get("user"), []);
+
+  useLog(keys);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    console.error(error);
+  }
+
+  if (!keys.includes("user")) {
+    router.push("/onboarding");
+  }
 
   return (
     <ParallaxScrollView
@@ -20,14 +44,16 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">
+          Welcome {username} to Little Lemon!
+        </ThemedText>
         <HelloWave />
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Routes</ThemedText>
         <ThemedText
-          type="defaultSemiBold"
+          type="link"
           onPress={() => {
             router.push("/");
           }}
@@ -38,7 +64,7 @@ export default function HomeScreen() {
           onPress={() => {
             router.push("/explore");
           }}
-          type="defaultSemiBold"
+          type="link"
         >
           Explore
         </ThemedText>
@@ -46,9 +72,18 @@ export default function HomeScreen() {
           onPress={() => {
             router.push("/onboarding");
           }}
-          type="defaultSemiBold"
+          type="link"
         >
           onboarding
+        </ThemedText>
+
+        <ThemedText
+          onPress={async () => {
+            await clear();
+          }}
+          type="link"
+        >
+         clear user 
         </ThemedText>
       </ThemedView>
 
