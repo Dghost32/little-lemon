@@ -95,6 +95,8 @@ const styles = StyleSheet.create({
   link: {
     lineHeight: 30,
     fontSize: 16,
+    fontFamily: "PoppinsMedium",
     color: "#0a7ea4",
+    textDecorationLine: "underline",
   },
 });

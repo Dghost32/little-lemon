@@ -1,18 +1,41 @@
-import useAsync from "@/hooks/useAsync";
-import useAsyncStorage from "@/hooks/useAsyncStorage";
-import { Stack, useRouter } from "expo-router";
 import React from "react";
+import HomeScreen from "./(home)";
+import ExploreScreen from "./explore";
+import OnboardingScreen from "./onboarding";
+import { createStackNavigator } from "@react-navigation/stack";
+import useAuth from "@/contexts/auth/useAuth";
+import Loading from "@/components/UI/Loading";
 
-export default function TabLayout() {
+const Stack = createStackNavigator();
+
+export default function ScreensLayout() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!user?.username)
+    return (
+      <Stack.Navigator
+        initialRouteName="Onboarding"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      </Stack.Navigator>
+    );
+
   return (
-    <Stack
+    <Stack.Navigator
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="(home)/index" />
-      <Stack.Screen name="explore/index" />
-      <Stack.Screen name="onboarding/index" />
-    </Stack>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Explore" component={ExploreScreen} />
+    </Stack.Navigator>
   );
 }

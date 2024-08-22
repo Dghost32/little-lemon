@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 export default function useAsyncStorageState<T extends unknown>({
   key,
   initialValue,
-}: Props<T>): [T, React.Dispatch<React.SetStateAction<T>>] {
+}: Props<T>): [T, React.Dispatch<React.SetStateAction<T>>, boolean] {
   const [value, setValue] = useState<T>(initialValue);
+  const [loading, setLoading] = useState<boolean>(true);
 
   async function save() {
     try {
@@ -29,6 +30,8 @@ export default function useAsyncStorageState<T extends unknown>({
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -42,7 +45,8 @@ export default function useAsyncStorageState<T extends unknown>({
     save();
   }, [value]);
 
-  return [value, setValue];
+  return [value, setValue, loading];
+
 }
 
 interface Props<T> {

@@ -3,18 +3,17 @@ import { Platform, StyleSheet } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import Button from "@/components/UI/Button";
 import { ThemedText } from "@/components/ThemedText";
-import { useRouter } from "expo-router";
 import useForm from "@/hooks/useForm";
 import Input from "@/components/Form/Input";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedKeyboardAvoidingView } from "@/components/ThemedKeyboardAvoidingView";
 import defaultStyles from "@/styles";
 import validateEmail from "@/lib/validateEmail";
-import useAsyncStorage from "@/hooks/useAsyncStorage";
+import useAuth from "@/contexts/auth/useAuth";
+import { router } from "expo-router";
 
-export default function Onboarding() {
+export default function OnboardingScreen() {
   const color = useThemeColor({}, "text");
-  const router = useRouter();
   const { values, handleChange, validate } = useForm({
     defaultValues: {
       name: {
@@ -29,7 +28,7 @@ export default function Onboarding() {
       },
     },
   });
-  const { save } = useAsyncStorage();
+  const { login } = useAuth();
   const { shadow, rounded } = defaultStyles;
 
   return (
@@ -76,16 +75,16 @@ export default function Onboarding() {
           <Button
             disabled={values.name.error || values.email.error}
             text="Next"
-            onPress={async () => {
-              if (
-                validate((data) => {
-                  return validateEmail(data.email.value ?? "");
-                })
-              ) {
-                await save("user", values.name.value ?? "");
-                await save("email", values.email.value ?? "");
+            onPress={() => {
+              const isValid = validate((data) =>
+                validateEmail(data.email.value ?? ""),
+              );
 
-                router.push("/");
+              if (isValid) {
+                login({
+                  username: values.name.value ?? "",
+                  email: values.email.value ?? "",
+                });
               }
             }}
           />
