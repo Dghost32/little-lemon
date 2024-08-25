@@ -4,6 +4,7 @@ type RootStackParamList = {
   Home: undefined;
   Explore: undefined;
   Onboarding: undefined;
+  Profile: undefined;
 };
 
 export default RootStackParamList;

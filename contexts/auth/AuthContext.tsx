@@ -5,12 +5,23 @@ import useLog from "@/hooks/useConsoleLog";
 type User = {
   username: string;
   email: string;
+  lastName: string;
+  phoneNumber: string;
+  profilePicture: string;
+  notify: {
+    orders: boolean;
+    password: boolean;
+    offers: boolean;
+    newsletters: boolean;
+  };
 };
 
 type AuthContextType = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
+  updateUserField: (field: keyof User, value: string) => void;
+  changeUser: (user: User) => void;
   login: (user: User, callback?: () => void) => void;
   logout: () => void;
 };
@@ -33,12 +44,26 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     if (callback) callback();
   }
 
+  const changeUser = (user: User) => {
+    setUser(user);
+  };
+
+  const updateUserField = (field: keyof User, value: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        [field]: value,
+      };
+    });
+  };
+
   function logout() {
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, logout, changeUser, updateUserField }}>
       {children}
     </AuthContext.Provider>
   );

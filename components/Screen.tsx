@@ -1,7 +1,6 @@
 import { PropsWithChildren } from "react";
 import { StyleSheet } from "react-native";
 import {
-  SafeAreaView,
   SafeAreaViewProps,
 } from "react-native-safe-area-context";
 import { ThemedSafeAreaView } from "./ThemedSafeAreaView";
@@ -11,7 +10,7 @@ type Props = PropsWithChildren<SafeAreaViewProps>;
 
 function Screen({ children, ...rest }: Props) {
   return (
-    <ThemedSafeAreaView style={[styles.screen]} {...rest}>
+    <ThemedSafeAreaView style={[styles.screen, styles.content]} {...rest}>
       <ThemedView style={styles.content}>{children}</ThemedView>
     </ThemedSafeAreaView>
   );
@@ -20,12 +19,12 @@ function Screen({ children, ...rest }: Props) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    gap: 16,
     overflow: 'hidden',
   },
   content: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+    gap: 16,
   },
 });
 

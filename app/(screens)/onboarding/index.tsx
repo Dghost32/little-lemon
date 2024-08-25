@@ -10,7 +10,6 @@ import { ThemedKeyboardAvoidingView } from "@/components/ThemedKeyboardAvoidingV
 import defaultStyles from "@/styles";
 import validateEmail from "@/lib/validateEmail";
 import useAuth from "@/contexts/auth/useAuth";
-import { router } from "expo-router";
 
 export default function OnboardingScreen() {
   const color = useThemeColor({}, "text");

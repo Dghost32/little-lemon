@@ -4,8 +4,9 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Loading from "@/components/UI/Loading";
 import Screen from "@/components/Screen";
-import useAuth from "@/contexts/auth/useAuth";
 import useRouter from "@/hooks/useRouter";
+import Header from "@/components/UI/Header";
+import useAuth from "@/contexts/auth/useAuth";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function HomeScreen() {
 
   return (
     <Screen>
+      <Header />
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">
           Welcome {user?.username} to Little Lemon!
@@ -32,7 +34,15 @@ export default function HomeScreen() {
             router.navigate("+not-found");
           }}
         >
-         Not found page 
+          Not found page
+        </ThemedText>
+        <ThemedText
+          type="link"
+          onPress={() => {
+            router.navigate("Profile");
+          }}
+        >
+          Profile page
         </ThemedText>
         <ThemedText
           onPress={() => {
