@@ -23,7 +23,14 @@ const Header = ({ ...rest }: Props) => {
         name="left"
         size={32}
       />
-      <ThemedText type="title">🍋 Little Lemon</ThemedText>
+      <ThemedText
+        onPress={() => {
+          router.navigate("Home");
+        }}
+        type="title"
+      >
+        🍋 Little Lemon
+      </ThemedText>
       {!user?.profilePicture ? (
         <Icon
           name="user"

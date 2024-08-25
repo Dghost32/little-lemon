@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-function useLog(value: React.ComponentState) {
+function useLog(value: React.ComponentState, name: string = "value") {
   useEffect(() => {
-    console.log("value", value);
+    console.log(name, value);
   }, [value]);
 }
 

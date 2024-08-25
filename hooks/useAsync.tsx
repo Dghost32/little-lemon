@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
 
-export default function useAsync(callback: () => Promise<any>, dependencies: any[] = []) {
+export default function useAsync<T>(callback: () => Promise<T>, dependencies: any[] = []) {
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState()
-    const [value, setValue] = useState()
+    const [error, setError] = useState<boolean>()
+    const [value, setValue] = useState<T>()
 
     const callbackMemoized = useCallback(() => {
         setLoading(true)
@@ -13,6 +13,8 @@ export default function useAsync(callback: () => Promise<any>, dependencies: any
             .then(setValue)
             .catch(setError)
             .finally(() => setLoading(false))
+
+        setLoading(false)
     }, dependencies)
 
     useEffect(() => {

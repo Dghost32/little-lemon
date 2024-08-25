@@ -1,6 +1,5 @@
 import React from "react";
 import HomeScreen from "./(home)";
-import ExploreScreen from "./explore";
 import OnboardingScreen from "./onboarding";
 import { createStackNavigator } from "@react-navigation/stack";
 import Loading from "@/components/UI/Loading";
@@ -36,7 +35,6 @@ export default function ScreensLayout() {
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Explore" component={ExploreScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
