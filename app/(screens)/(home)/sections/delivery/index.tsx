@@ -4,7 +4,6 @@ import DeliveryItem from "@/components/UI/DeliveryItem";
 import Error from "@/components/UI/Error";
 import Loading from "@/components/UI/Loading";
 import useProducts from "@/hooks/useProducts";
-import Category from "@/types/category";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
