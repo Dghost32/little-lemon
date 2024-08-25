@@ -2,6 +2,11 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+# Mockups
+![Onboarding image](./assets/mockups/onboarding.png)
+![Profile image](./assets/mockups/profile.png)
+![Home image](./assets/mockups/home.png)
+
 ## Get started
 
 1. Install dependencies
