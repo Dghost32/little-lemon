@@ -38,7 +38,7 @@ function DeliveryItem({ product, ...rest }: Props) {
         </ThemedView>
         <ThemedView>
           <ThemedText type="default">
-            ${10 + Math.floor(Math.random() * 5)} mins | ${product.price}
+            {10 + Math.floor(Math.random() * 5)} mins | ${product.price}
           </ThemedText>
         </ThemedView>
         <ThemedView style={{ flex: 1, flexDirection: "row", gap: 5 }}>

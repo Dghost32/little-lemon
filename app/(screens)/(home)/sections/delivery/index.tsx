@@ -4,11 +4,11 @@ import DeliveryItem from "@/components/UI/DeliveryItem";
 import Error from "@/components/UI/Error";
 import Loading from "@/components/UI/Loading";
 import useProducts from "@/hooks/useProducts";
+import Category from "@/types/category";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-function Delivery() {
-
+function Delivery({ selectedCategories }: { selectedCategories: string[] }) {
   const { products, loading, error } = useProducts();
 
   if (loading) {
@@ -23,7 +23,11 @@ function Delivery() {
     <ThemedView>
       <ThemedText type="title">Order for delivery</ThemedText>
       <FlatList
-        data={[...(products?? [])]}
+        data={
+          products?.filter((product) =>
+            selectedCategories.includes(product.category),
+          ) ?? []
+        }
         contentContainerStyle={styles.container}
         keyExtractor={(item, index) => `${item.title}-${index}`}
         renderItem={({ item }) => <DeliveryItem product={item} />}

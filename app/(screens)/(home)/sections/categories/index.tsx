@@ -4,10 +4,23 @@ import CategoryItem from "@/components/UI/Category";
 import Error from "@/components/UI/Error";
 import Loading from "@/components/UI/Loading";
 import useProducts from "@/hooks/useProducts";
+import { useEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
-function Categories() {
+function Categories({
+  selectedCategories,
+  setSelectedCategories,
+}: {
+  selectedCategories: string[];
+  setSelectedCategories: (categories: string[]) => void;
+}) {
   const { categories, loading, error } = useProducts();
+
+  useEffect(() => {
+    if (categories) {
+      setSelectedCategories(categories.map((category) => category.name));
+    }
+  }, [categories]);
 
   if (loading) {
     return <Loading />;
@@ -22,16 +35,30 @@ function Categories() {
       <ThemedText type="title">Categories</ThemedText>
 
       <FlatList
-        data={[...(categories ?? []), ...(categories ?? [])]}
+        data={[...(categories ?? [])]}
         horizontal
         contentContainerStyle={styles.container}
         keyExtractor={(item, index) => `${item.name}-${index}`}
         renderItem={({ item }) => (
           <CategoryItem
             image={item.image}
+            selected={selectedCategories.includes(item.name)}
             name={item.name}
             onTouchEnd={() => {
-              console.log("Category tapped!");
+              if (
+                selectedCategories.length === 1 &&
+                selectedCategories.includes(item.name)
+              ) {
+                return;
+              }
+
+              selectedCategories.includes(item.name)
+                ? setSelectedCategories(
+                    selectedCategories.filter(
+                      (category) => category !== item.name,
+                    ),
+                  )
+                : setSelectedCategories([...selectedCategories, item.name]);
             }}
           />
         )}
